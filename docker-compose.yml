@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  cassandra:
+    image: cassandra:latest
+    ports:
+      - 9042:9042
+    environment:
+      - CASSANDRA_USERNAME=cassandra
+      - CASSANDRA_PASSWORD=cassandra
+
+  janusgraph:
+    image: janusgraph/janusgraph:latest
+    ports:
+      - 8182:8182
+    depends_on:
+      - cassandra
+    environment:
+      - janusgraph.graphname=graph
+      - janusgraph.storage.backend=cql
+      - janusgraph.storage.hostname=cassandra
+      - janusgraph.storage.cql.username=cassandra
+      - janusgraph.storage.cql.password=cassandra
+      - graph.replace-instance-if-exists=true
